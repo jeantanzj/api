@@ -16,7 +16,7 @@ var attendanceContent = [{"ABSENT": ["Mr CHARLES CHONG (Joo Chiat), Deputy Speak
 
 var tinPeiLingDict = {};
 tinPeiLingDict['Topics'] = [];
-tinPeiLingDict['Attendance'] = 0;
+// tinPeiLingDict['Attendance'] = 0;
 
 
 // filter out all the topics for Tin Pei Ling
@@ -29,14 +29,14 @@ for (let i = 0; i < content.length; i++) {
 
 //finding the attendance rate for Tin Pei Ling
 
-for (let i = 0; i < attendanceContent.length; i ++) {
-	let presentCount = 0;
-	let present = attendanceContent[i]["PRESENT"];
-	if (present.match('TIN PEI LING')){
-		presentCount += 1;
-	}
-	tinPeiLingDict['Attendance'] = presentCount/attendanceContent.length;
-}
+// for (let i = 0; i < attendanceContent.length; i ++) {
+// 	let presentCount = 0;
+// 	let present = attendanceContent[i]["PRESENT"];
+// 	if (present.match('TIN PEI LING')){
+// 		presentCount += 1;
+// 	}
+// 	tinPeiLingDict['Attendance'] = presentCount/attendanceContent.length;
+// }
 
 
 //Add headers
