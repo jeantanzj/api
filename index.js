@@ -76,20 +76,23 @@ listofMPs[78]  = 'Mohamad Maliki'
 
 var attendanceRate = (name) =>  {
 
+
+var regex = new RegExp(name, "i")
+
 var presentCount = 0
 var attendanceRateValue = 0
 
 for (let i = 0; i < attendanceContent.length; i ++) {
 	let present = attendanceContent[i]["PRESENT"];
 	for (let i = 0; i < present.length; i ++) {
-		if (present[i].match(name)){
+		if (present[i].match(regex)){
 			presentCount++;
 			break;			
 		}
 	}
 	attendanceRateValue = presentCount/attendanceContent.length * 100;
 };
-
+console.log(name, attendanceRateValue)
 return attendanceRateValue;
 };
 
@@ -102,7 +105,7 @@ for (let mpIndex = 0; mpIndex < listofMPs.length; mpIndex ++){
 	arrayAttendance[listofMPs[mpIndex]] = attendanceRate(listofMPs[mpIndex].toUpperCase());
 }
 
-console.log(arrayAttendance);
+
 //replace those name with 0 attendance
 
 var listofZeroMPs = []; 
@@ -143,11 +146,13 @@ tinPeiLingDict['VoteAbstain'] = [];
 
 var topicsDiscussed = (name) =>  {
 
+var regex = new RegExp(name, "i")
+
 var topics = [];
 
 for (let i = 0; i < content.length; i++) {
 	let mpSpeaking = content[i]['MPs Speaking'];
-	if  (mpSpeaking.match(name)){
+	if  (mpSpeaking.match(regex)){
 		let cleanString = content[i]['Title'].substr(1);
 		if (cleanString[0] == "»"){
 			cleanString = cleanString.substr(1);
@@ -177,13 +182,13 @@ for (let i = 0; i < content.length; i++) {
 
 //finding the attendance rate for Tin Pei Ling
 
-
+var regex = new RegExp('Tin Pei Ling', "i")
 var presentCount = 0
 
 for (let i = 0; i < attendanceContent.length; i ++) {
 	let present = attendanceContent[i]["PRESENT"];
 	for (let i = 0; i < present.length; i ++) {
-		if (present[i].match('TIN PEI LING')){
+		if (present[i].match(regex)){
 			presentCount++;
 			break;			
 		}
@@ -198,10 +203,12 @@ var votefunction = (name) =>  {
 
 var  voteDict = { 'voteYes': [], 'voteNo': [], 'voteAbstain':[]}
 
+var regex = new RegExp(name, "i")
+
 for (let i = 0; i < vote.length; i++) {
-	if(vote[i]['Ayes'].match('Tin Pei Ling')){
+	if(vote[i]['Ayes'].match(regex)){
 		voteDict['voteYes'].push(vote[i]['Title']);
-	} else if(vote[i]['Noes'].match('Tin Pei Ling')){
+	} else if(vote[i]['Noes'].match(regex)){
 		voteDict['voteNo'].push(vote[i]['Title']);
 	} else {
 		voteDict['voteAbstain'].push(vote[i]['Title']);
@@ -215,6 +222,7 @@ return voteDict;
 
 
 //filter the relevant vote 
+
 
 for (let i = 0; i < vote.length; i++) {
 	if(vote[i]['Ayes'].match('Tin Pei Ling')){
@@ -268,7 +276,7 @@ app.get('/:mpName', function(req, res){
 
 	var dict = {}
 
-	dict['Attendance'] = attendanceRate(req.params.mpName.toUpperCase());
+	dict['Attendance'] = attendanceRate(req.params.mpName);
 	dict['Topics'] = topicsDiscussed(req.params.mpName);
 	dict['VoteYes'] = votefunction(req.params.mpName)['voteYes'];
 	dict['VoteNo'] = votefunction(req.params.mpName)['voteNo'];
@@ -282,5 +290,5 @@ app.get('/:mpName', function(req, res){
 
 // listen for requests
 app.listen(port, function(){
-    console.log(listofMPs);
+    console.log('successful');
 });
