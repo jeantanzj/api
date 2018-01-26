@@ -136,6 +136,30 @@ tinPeiLingDict['VoteYes'] = [];
 tinPeiLingDict['VoteNo'] = [];
 tinPeiLingDict['VoteAbstain'] = [];
 
+//function for filtering topics 
+
+
+//function for finding attendance rate
+
+var topicsDiscussed = (name) =>  {
+
+var topics = [];
+
+for (let i = 0; i < content.length; i++) {
+	let mpSpeaking = content[i]['MPs Speaking'];
+	if  (mpSpeaking.match(name)){
+		let cleanString = content[i]['Title'].substr(1);
+		if (cleanString[0] == "»"){
+			cleanString = cleanString.substr(1);
+		}
+		topics.push(cleanString);
+	}
+};
+
+return topics;
+};
+
+
 // filter out all the topics for Tin Pei Ling
 for (let i = 0; i < content.length; i++) {
 	let mpSpeaking = content[i]['MPs Speaking'];
@@ -166,6 +190,28 @@ for (let i = 0; i < attendanceContent.length; i ++) {
 	}
 	tinPeiLingDict['Attendance'] = presentCount/attendanceContent.length * 100;
 }
+
+
+//function for finding attendance rate
+
+var votefunction = (name) =>  {
+
+var  voteDict = { 'voteYes': [], 'voteNo': [], 'voteAbstain':[]}
+
+for (let i = 0; i < vote.length; i++) {
+	if(vote[i]['Ayes'].match('Tin Pei Ling')){
+		voteDict['voteYes'].push(vote[i]['Title']);
+	} else if(vote[i]['Noes'].match('Tin Pei Ling')){
+		voteDict['voteNo'].push(vote[i]['Title']);
+	} else {
+		voteDict['voteAbstain'].push(vote[i]['Title']);
+	}
+}
+
+
+return voteDict;
+};
+
 
 
 //filter the relevant vote 
@@ -219,11 +265,22 @@ app.get('/tinpeiling', function(req, res){
 
 //general rotues
 app.get('/:mpName', function(req, res){
-	res.send(`Welcome to ${req.params.mpName}`);
+
+	var dict = {}
+
+	dict['Attendance'] = attendanceRate(req.params.mpName.toUpperCase());
+	dict['Topics'] = topicsDiscussed(req.params.mpName);
+	dict['VoteYes'] = votefunction(req.params.mpName)['voteYes'];
+	dict['VoteNo'] = votefunction(req.params.mpName)['voteNo'];
+	dict['VoteAbstain'] = votefunction(req.params.mpName)['voteAbstain'];
+
+
+	res.json(dict);
+
 });
 
 
 // listen for requests
 app.listen(port, function(){
-    console.log("connect successfully");
+    console.log(listofMPs);
 });
