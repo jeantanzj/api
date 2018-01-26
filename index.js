@@ -65,6 +65,13 @@ for (let i = 0; i < listofMPs.length; i ++){
 	}
 }
 
+
+listofMPs[8] = 'Cheryl Chan';
+listofMPs[22] = 'Desmond Choo';
+listofMPs[26] = 'Christopher De Souza'
+listofMPs[41] = 'Sun Xueling'
+listofMPs[78]  = 'Mohamad Maliki'
+
 //function for finding attendance rate
 
 var attendanceRate = (name) =>  {
@@ -95,6 +102,7 @@ for (let mpIndex = 0; mpIndex < listofMPs.length; mpIndex ++){
 	arrayAttendance[listofMPs[mpIndex]] = attendanceRate(listofMPs[mpIndex].toUpperCase());
 }
 
+console.log(arrayAttendance);
 //replace those name with 0 attendance
 
 var listofZeroMPs = []; 
@@ -107,18 +115,18 @@ for (let i=0; i < Object.keys(arrayAttendance).length; i++){
 
 
 
-var trueName = (element) => {
-	return element == listofZeroMPs[5]
-}
+// var trueName = (element) => {
+// 	return element == listofZeroMPs[5]
+// }
 
-console.log(listofMPs.findIndex(trueName))
-console.log(listofMPs[78])
+// console.log(listofMPs.findIndex(trueName))
+// console.log(listofMPs[78])
 
-listofMPs[8] == 'Cheryl Chan';
-listofMPs[22] == 'Desmond Choo';
-listofMPs[26] == 'Christopher De Souza'
-listofMPs[41] == 'Sun Xueling'
-listofMPs[78] == 'Mohamad Maliki'
+// listofMPs[8] == 'Cheryl Chan';
+// listofMPs[22] == 'Desmond Choo';
+// listofMPs[26] == 'Christopher De Souza'
+// listofMPs[41] == 'Sun Xueling'
+// listofMPs[78] == 'Mohamad Maliki'
 
 
 var tinPeiLingDict = {};
@@ -203,14 +211,15 @@ app.get('/', function(req, res){
     res.json(attendanceContent);
 });
 
-//general rotues
-app.get('/:mpName', function(req, res){
-	res.send(`Welcome to ${req.params.mpName}`);
-});
-
 // route for Tin Pei Ling
 app.get('/tinpeiling', function(req, res){
 	res.json(tinPeiLingDict);
+});
+
+
+//general rotues
+app.get('/:mpName', function(req, res){
+	res.send(`Welcome to ${req.params.mpName}`);
 });
 
 
