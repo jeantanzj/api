@@ -55,6 +55,71 @@ var vote = [
   }
 ];
 
+//getting the list of MPs
+var listofMPs = vote[0]['Ayes'].split(';');
+
+// clean whitespace
+for (let i = 0; i < listofMPs.length; i ++){
+	if (listofMPs[i][0] == " "){
+		listofMPs[i] = listofMPs[i].substr(1);
+	}
+}
+
+//function for finding attendance rate
+
+var attendanceRate = (name) =>  {
+
+var presentCount = 0
+var attendanceRateValue = 0
+
+for (let i = 0; i < attendanceContent.length; i ++) {
+	let present = attendanceContent[i]["PRESENT"];
+	for (let i = 0; i < present.length; i ++) {
+		if (present[i].match(name)){
+			presentCount++;
+			break;			
+		}
+	}
+	attendanceRateValue = presentCount/attendanceContent.length * 100;
+};
+
+return attendanceRateValue;
+};
+
+
+
+//average attendance rate
+var arrayAttendance = {};
+
+for (let mpIndex = 0; mpIndex < listofMPs.length; mpIndex ++){
+	arrayAttendance[listofMPs[mpIndex]] = attendanceRate(listofMPs[mpIndex].toUpperCase());
+}
+
+//replace those name with 0 attendance
+
+var listofZeroMPs = []; 
+
+for (let i=0; i < Object.keys(arrayAttendance).length; i++){
+	if(arrayAttendance[Object.keys(arrayAttendance)[i]]==0){
+		listofZeroMPs.push(Object.keys(arrayAttendance)[i])
+	}
+}
+
+
+
+var trueName = (element) => {
+	return element == listofZeroMPs[5]
+}
+
+console.log(listofMPs.findIndex(trueName))
+console.log(listofMPs[78])
+
+listofMPs[8] == 'Cheryl Chan';
+listofMPs[22] == 'Desmond Choo';
+listofMPs[26] == 'Christopher De Souza'
+listofMPs[41] == 'Sun Xueling'
+listofMPs[78] == 'Mohamad Maliki'
+
 
 var tinPeiLingDict = {};
 tinPeiLingDict['Topics'] = [];
@@ -75,7 +140,11 @@ for (let i = 0; i < content.length; i++) {
 	}
 };
 
+
+
+
 //finding the attendance rate for Tin Pei Ling
+
 
 var presentCount = 0
 
@@ -90,6 +159,7 @@ for (let i = 0; i < attendanceContent.length; i ++) {
 	tinPeiLingDict['Attendance'] = presentCount/attendanceContent.length * 100;
 }
 
+
 //filter the relevant vote 
 
 for (let i = 0; i < vote.length; i++) {
@@ -100,7 +170,6 @@ for (let i = 0; i < vote.length; i++) {
 	} else {
 		tinPeiLingDict['VoteAbstain'].push(vote[i]['Title']);
 	}
-	console.log(i);
 }
 
 //Add headers
@@ -134,6 +203,11 @@ app.get('/', function(req, res){
     res.json(attendanceContent);
 });
 
+//general rotues
+app.get('/:mpName', function(req, res){
+	res.send(`Welcome to ${req.params.mpName}`);
+});
+
 // route for Tin Pei Ling
 app.get('/tinpeiling', function(req, res){
 	res.json(tinPeiLingDict);
@@ -142,5 +216,5 @@ app.get('/tinpeiling', function(req, res){
 
 // listen for requests
 app.listen(port, function(){
-    console.log(tinPeiLingDict);
+    console.log("connect successfully");
 });
